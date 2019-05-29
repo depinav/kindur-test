@@ -1,13 +1,18 @@
+const fs = require('fs');
 const _ = require('lodash');
 
-const prices = `Candy Bar, 500
+let prices = `Candy Bar, 500
 Paperback Book, 700
 Detergent, 102200
 Headphones, 1400
 Earmuffs, 2000
 Bluetooth Stereo, 6000`;
-const total = 1000;
+const total = _.last(process.argv);
 
+fs.readFile(_.nth(process.argv, -2), 'utf8', function(err, data) {  
+    if (err) throw err;
+    prices = data;
+});
 
 let firstItem, secondItem;
 
@@ -35,9 +40,9 @@ if(firstItem) {
 }
 
 if(firstItem && secondItem) {
-    
+    process.stdout.write(`${_.values(firstItem)} ${_.values(secondItem)}`);
 } else {
-    return 'Not possible';
+    process.stdout.write('Not possible');
 }
 
 function priceBinarySearch(arr, midIndex, startIndex, endIndex, target) {
@@ -49,7 +54,7 @@ function priceBinarySearch(arr, midIndex, startIndex, endIndex, target) {
   
   const midIndexAmount = arr[midIndex].amount;
   
-  if(midIndexAmount === target) return arr[midIndex];µ
+  if(midIndexAmount === target) return arr[midIndex];
   if(midIndex > 0 && midIndexAmount > target && arr[midIndex -1].amount < target) return arr[midIndex -1];
     
   if(midIndexAmount < target) {
