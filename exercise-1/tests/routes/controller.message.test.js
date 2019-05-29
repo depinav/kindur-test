@@ -1,4 +1,7 @@
 const expect = require('chai').expect;
+global.window = {};
+require('mock-local-storage');
+window.localStorage = global.localStorage;
 
 const MessageController = require('../../router/controller/controller.messages');
 
@@ -57,4 +60,58 @@ describe('Messages Route', function() {
             expect(res.statusCode).to.equal(400);
         });
     })
+
+    describe('get function', function() {
+        it('Should return the message if correct hash is passed in', () => {
+            let req = {
+                params: {
+                    hash: 'abc123'
+                }
+            };
+
+            localStorage.setItem('abc123', 'foo');
+
+            MessageController.get(req, res);
+            expect(res.sendCalledWith).to.contain('message');
+            expect(res.statusCode).to.equal(200);
+        });
+
+        it('Should error out if hash doesn\'t exist', () => {
+            let req = {
+                params: {
+                    hash: '123ewqe'
+                }
+            };
+
+            MessageController.get(req, res);
+            expect(res.sendCalledWith).to.contain('err_msg');
+            expect(res.statusCode).to.equal(404);
+        });
+
+        it('Should error out if hash is null', () => {
+            let req = {
+                params: {
+                    hash: null
+                }
+            };
+
+
+
+            MessageController.get(req, res);
+            expect(res.sendCalledWith).to.contain('err_msg');
+            expect(res.statusCode).to.equal(404);
+        });
+
+        it('Should error out if hash is undefined', () => {
+            let req = {
+                params: {
+                    hash: undefined
+                }
+            };
+
+            MessageController.get(req, res);
+            expect(res.sendCalledWith).to.contain('err_msg');
+            expect(res.statusCode).to.equal(404);
+        });
+    });
 });

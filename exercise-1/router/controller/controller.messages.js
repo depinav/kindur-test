@@ -24,7 +24,13 @@ const MessageController = {
 
     get: (req, res) => {
         const { hash } = req.params;
-        const message = localStorage.getItem(hash);
+        let message;
+
+        try {
+            message = localStorage.getItem(hash);
+        } catch (error) {
+            message = null;
+        }
         
         if(message) {
             res.statusCode = 200;
