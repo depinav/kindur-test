@@ -1,49 +1,46 @@
 const fs = require('fs');
 const _ = require('lodash');
 
-let prices = `Candy Bar, 500
-Paperback Book, 700
-Detergent, 102200
-Headphones, 1400
-Earmuffs, 2000
-Bluetooth Stereo, 6000`;
-const total = _.last(process.argv);
-
-fs.readFile(_.nth(process.argv, -2), 'utf8', function(err, data) {  
+(function() {
+  let prices;
+  const total = _.last(process.argv);
+  
+  fs.readFile(_.nth(process.argv, -2), 'utf8', function(err, data) {
     if (err) throw err;
     prices = data;
-});
 
-let firstItem, secondItem;
+    let firstItem, secondItem;
 
-const splitPrices = prices.split(/\r\n|\r|\n/);
-
-const priceList = _.map(splitPrices, (price, i) => {
-  const [item, amount] = price.split(',');
-  const parsedAmount = _.parseInt(amount);
-  return {
-    item,
-    amount: parsedAmount
-  }
-});
-
-const sortedPriceList = priceList.sort((a, b) => a.amount - b.amount);
-const len = sortedPriceList.length;
-firstItem = priceBinarySearch(sortedPriceList, _.floor(len/2), 0, len -1, total);
-
-if(firstItem) {
-  const newSortedPriceList = _.remove(sortedPriceList, (price) => price != firstItem);
-  const len = newSortedPriceList.length;
-  const newTarget = total - firstItem.amount;
-  secondItem = priceBinarySearch(newSortedPriceList, _.floor(len/2), 0, len -1, newTarget);
-  
-}
-
-if(firstItem && secondItem) {
-    process.stdout.write(`${_.values(firstItem)} ${_.values(secondItem)}`);
-} else {
-    process.stdout.write('Not possible');
-}
+    const splitPrices = prices.split(/\r\n|\r|\n/);
+    
+    const priceList = _.map(splitPrices, (price, i) => {
+      const [item, amount] = price.split(',');
+      const parsedAmount = _.parseInt(amount);
+      return {
+        item,
+        amount: parsedAmount
+      }
+    });
+    
+    const sortedPriceList = priceList.sort((a, b) => a.amount - b.amount);
+    const len = sortedPriceList.length;
+    firstItem = priceBinarySearch(sortedPriceList, _.floor(len/2), 0, len -1, total);
+    
+    if(firstItem) {
+      const newSortedPriceList = _.remove(sortedPriceList, (price) => price != firstItem);
+      const len = newSortedPriceList.length;
+      const newTarget = total - firstItem.amount;
+      secondItem = priceBinarySearch(newSortedPriceList, _.floor(len/2), 0, len -1, newTarget);
+      
+    }
+    
+    if(firstItem && secondItem) {
+        process.stdout.write(`${_.values(firstItem)} ${_.values(secondItem)}`);
+    } else {
+        process.stdout.write('Not possible');
+    }
+  });
+})();
 
 function priceBinarySearch(arr, midIndex, startIndex, endIndex, target) {
   
