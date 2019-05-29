@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ./exercise-1/tests --recursive",
-    "start": "node exercise-1/index.js"
+    "start": "node exercise-1/index.js",
+    "exercise-2": "node exercise-2/index.js",
+    "exercise-3": "node exercise-3/index.js"
   },
   "author": "",
   "license": "ISC",
