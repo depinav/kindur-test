@@ -1,4 +1,4 @@
-#How to run the exercises
+## How to run the exercises
 
 * To access deployed API use the following base URL:
     * pacific-thicket-13558.herokuapp.com
