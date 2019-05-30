@@ -2,7 +2,11 @@ const _ = require('lodash');
 
 (function() {
   const sample = _.last(process.argv);
+  const results = replaceAllXsWithZeroAndOne(sample);
+  process.stdout.write(results.toString());
+})();
 
+function replaceAllXsWithZeroAndOne(sample) {
   const induces = [];
   // get induces of str that are 'X'
   for(let i = 0, len = sample.length; i < len; i++) {
@@ -16,7 +20,7 @@ const _ = require('lodash');
   let prevSampleForMap = '';
 
 
-  const results = _.map(totalPermutations, (perm, i) => {
+  return results = _.map(totalPermutations, (perm, i) => {
     if(i === 0) {
       prevSampleFromMap = sample.replace(/\X|x/g, '0');
       return prevSampleFromMap;
@@ -29,9 +33,7 @@ const _ = require('lodash');
     
     return newSample;
   })
-
-  process.stdout.write(results.toString());
-})();
+}
 
 function replaceAt(original, index, replacement) {
   return original.substr(0, index) + replacement+ original.substr(index + replacement.length);
